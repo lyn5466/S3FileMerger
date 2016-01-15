@@ -1,0 +1,22 @@
+1.1 coalesce false
+1.2 coalesce true
+1.3 coalesce true and partition by(hash partitioner)
+1.4 coalesce true and partition by(hash partitioner) and no multiple write
+1.5 partition by(hash partitioner) and no multiple write
+1.6 no multiple write and add partition in reduceByKey
+1.7 wholetextfiles read and process and change to spark 1.5.0 （FAILED）
+————change to no additional map and reduce and directly output to s3  =>FAST!!!!!
+1.8 based on 1.7 but put map(classification) back to see its performance
+————fast as 1.7 but output format becomes(key,value) per line
+1.9 based on 1.8 but replace to saveAsHadoopFile(text format output) to test saveAsHadoopFile’s performance
+————fast as 1.8 but output format becomes key \tab value per line
+2.0 use multipleoutputformat again and change the saveashadoopfile’s key class and value class from string to text
+————fast as 1.9!!!! IT WORKS NOW!
+2.1 based on 2.0 and change Text to String to see whether it causes the bad performance
+————Same performance to 2.0!!!!
+
+Conclusion:
+1. reduceByKey will cause bad performance since big size of value
+2. wholetextfiles cannot work on gzip files
+3. Text and String in saveAsHadoopFile seems to act no difference in performance
+4. 
